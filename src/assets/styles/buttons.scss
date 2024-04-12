@@ -1,0 +1,91 @@
+.btn {
+  transition: all 0.3s ease;
+  transform: translateY(0);
+  @apply flex flex-row items-center justify-center py-3 px-5 text-base leading-none text-center w-fit cursor-pointer relative outline-none rounded;
+
+  &:disabled {
+    @apply opacity-50;
+  }
+
+  &.btn__white {
+    @apply bg-white text-black border-none;
+
+    &:hover {
+      @apply bg-white text-black border-none;
+    }
+  }
+
+  &.btn__white__outlined {
+    @apply border border-white text-white bg-transparent;
+
+    &:hover,
+    &.active {
+      @apply border border-white text-black bg-white;
+    }
+  }
+
+  &.btn__yellow {
+    @apply bg-yellow text-black border-none;
+
+    &:hover {
+      @apply bg-yellow text-black border-none;
+    }
+  }
+
+  &.btn__yellow__outlined {
+    @apply border border-yellow text-yellow bg-transparent;
+
+    &:hover,
+    &.active {
+      @apply border border-yellow text-black bg-yellow;
+    }
+  }
+
+  &.btn__black {
+    @apply bg-black text-yellow border-none;
+
+    &:hover {
+      @apply bg-black text-yellow  border-none;
+    }
+  }
+
+  &.btn__black__outlined {
+    @apply border border-black text-black bg-transparent;
+
+    &:hover,
+    &.active {
+      @apply border border-black text-yellow bg-black;
+    }
+  }
+
+  &:hover {
+    transform: translateY(-3px);
+
+    .replay-icon {
+      transform: rotate(-45deg);
+    }
+  }
+}
+
+.btn-inline {
+  transition: all 0.3s ease;
+  @apply p-0 text-base lg:text-lg leading-none w-fit cursor-pointer;
+
+  transform: translateY(0);
+
+  &__white {
+    @apply text-white;
+  }
+
+  &__yellow {
+    @apply text-yellow;
+  }
+
+  &__black {
+    @apply text-black;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
