@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import type { WeeklyMealPlan, Recipe } from '@/types/recipes'
 import { generateMealPlan, fetchRecipes } from '@/services/fetchRecipes'
 import { getDataFromLocalStorage, storeDataInLocalStorage } from '@/utils/handleLocalStorage'
-import { useDataKeyStore } from '@/stores/localStorageDataKey'
+import { useDataKeysStore } from '@/stores/localStorageDataKeys'
 
 const initialMealPlan: WeeklyMealPlan = {
   week: {
@@ -77,13 +77,13 @@ export const useMealPlanStore = defineStore({
   state: () => ({
     mealPlan: { ...initialMealPlan } as WeeklyMealPlan,
     ignredients:
-      (localStorage.getItem(useDataKeyStore().ingredientsKey) as string) || ('' as string)
+      (localStorage.getItem(useDataKeysStore().ingredientsKey) as string) || ('' as string)
   }),
 
   actions: {
     async setMealPlan(updatedIngredients: string) {
-      const dataKey: string = useDataKeyStore().dataKey
-      const ingredientKey: string = useDataKeyStore().ingredientsKey
+      const dataKey: string = useDataKeysStore().mealPlanKey
+      const ingredientKey: string = useDataKeysStore().ingredientsKey
       if (
         localStorage.getItem(ingredientKey) == updatedIngredients &&
         getDataFromLocalStorage(dataKey)
