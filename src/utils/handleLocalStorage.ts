@@ -24,4 +24,7 @@ const getDataFromLocalStorage = (key: string): any => {
   }
 }
 
-export { storeDataInLocalStorage, getDataFromLocalStorage }
+const mealPlanKey: string = 'mealPlan'
+const ingredientsKey: string = 'ingredients'
+
+export { storeDataInLocalStorage, getDataFromLocalStorage, mealPlanKey, ingredientsKey }

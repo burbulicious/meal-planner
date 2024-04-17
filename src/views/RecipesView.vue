@@ -1,22 +1,36 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import type { WeeklyMealPlan } from '@/types/recipes'
 import { roundUpToNearestInteger } from '@/composables/calculations'
 import { useMealPlanStore } from '@/stores/mealPlanStore'
+import InputNewIngredient from '@/components/InputNewIngredient.vue'
+import { getDataFromLocalStorage, mealPlanKey } from '@/utils/handleLocalStorage'
 
 const mealPlanStore = useMealPlanStore()
+const mealPlanExists = ref<boolean>(false)
 const mealPlan = ref<WeeklyMealPlan>(mealPlanStore.mealPlan)
 
 onMounted(async () => {
-  await mealPlanStore.setMealPlan('carrot')
-  mealPlanStore.getMealPlan
-  mealPlan.value = mealPlanStore.mealPlan
-  await console.log(mealPlan.value.week.monday.meals[0].title)
+  if (getDataFromLocalStorage(mealPlanKey)) {
+    mealPlanExists.value = true
+  }
 })
+
+watch(
+  () => mealPlanStore.mealPlan,
+  (newMealPlan) => {
+    mealPlan.value = newMealPlan
+    if (newMealPlan) {
+      mealPlanExists.value = true
+    } else {
+      mealPlanExists.value = false
+    }
+  }
+)
 </script>
 
 <template>
-  <div class="grid grid-cols-4">
+  <div class="grid grid-cols-4" v-if="mealPlanExists">
     <div v-for="(dayInfo, title) in mealPlan.week" :key="title" class="p-10">
       <h2 class="h2">{{ title }}</h2>
       <ul v-for="(item, index) in dayInfo.meals" :key="item.id">
@@ -34,4 +48,5 @@ onMounted(async () => {
       </ul>
     </div>
   </div>
+  <InputNewIngredient />
 </template>

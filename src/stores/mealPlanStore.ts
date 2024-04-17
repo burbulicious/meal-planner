@@ -1,10 +1,15 @@
 import { defineStore } from 'pinia'
 import type { WeeklyMealPlan, Recipe } from '@/types/recipes'
 import { generateMealPlan, fetchRecipes } from '@/services/fetchRecipes'
-import { getDataFromLocalStorage, storeDataInLocalStorage } from '@/utils/handleLocalStorage'
-import { useDataKeysStore } from '@/stores/localStorageDataKeys'
+import {
+  getDataFromLocalStorage,
+  storeDataInLocalStorage,
+  mealPlanKey,
+  ingredientsKey
+} from '@/utils/handleLocalStorage'
+import itemExists from '@/utils/existsInList'
 
-const initialMealPlan: WeeklyMealPlan = {
+const initialMealPlan: WeeklyMealPlan = getDataFromLocalStorage(mealPlanKey) || {
   week: {
     monday: {
       meals: [],
@@ -71,32 +76,53 @@ const initialMealPlan: WeeklyMealPlan = {
     }
   }
 }
+const initialIngredients: string =
+  (localStorage.getItem(ingredientsKey) as string) || ('' as string)
 
 export const useMealPlanStore = defineStore({
   id: 'mealPlan',
   state: () => ({
     mealPlan: { ...initialMealPlan } as WeeklyMealPlan,
-    ignredients:
-      (localStorage.getItem(useDataKeysStore().ingredientsKey) as string) || ('' as string)
+    ingredients: initialIngredients
   }),
 
   actions: {
-    async setMealPlan(updatedIngredients: string) {
-      const dataKey: string = useDataKeysStore().mealPlanKey
-      const ingredientKey: string = useDataKeysStore().ingredientsKey
-      if (
-        localStorage.getItem(ingredientKey) == updatedIngredients &&
-        getDataFromLocalStorage(dataKey)
-      ) {
-        this.mealPlan = getDataFromLocalStorage(dataKey)
-      } else {
-        const recipes: Recipe[] = await fetchRecipes(updatedIngredients)
-        const recipeIds: number[] = recipes.map((recipe) => recipe.id)
-        this.mealPlan = await generateMealPlan(recipeIds)
-        storeDataInLocalStorage(dataKey, this.mealPlan)
-        this.ignredients = updatedIngredients
-        localStorage.setItem(ingredientKey, this.ignredients)
+    setIngredients(updatedIngredients: string) {
+      this.ingredients = updatedIngredients
+      localStorage.setItem(ingredientsKey, this.ingredients)
+    },
+    addIngredient(newIngredient: string) {
+      const ingredientToAdd: string = newIngredient.trim()
+      if (!itemExists(ingredientToAdd, this.ingredients)) {
+        if (this.ingredients) {
+          this.ingredients += `, ${ingredientToAdd}`
+        } else {
+          this.ingredients = ingredientToAdd
+        }
+        localStorage.setItem(ingredientsKey, this.ingredients)
+        return true
       }
+      return false
+    },
+    removeIngredient(inputIngredient: string) {
+      const ingredientToRemove: string = inputIngredient.trim()
+      if (itemExists(ingredientToRemove, this.ingredients)) {
+        this.ingredients = this.ingredients
+          .split(',')
+          .map((item) => item.trim())
+          .filter((item) => item !== ingredientToRemove)
+          .join(', ')
+
+        localStorage.setItem(ingredientsKey, this.ingredients)
+        return true
+      }
+      return false
+    },
+    async setNewMealPlan() {
+      const recipes: Recipe[] = await fetchRecipes(this.ingredients)
+      const recipeIds: number[] = recipes.map((recipe) => recipe.id)
+      this.mealPlan = await generateMealPlan(recipeIds)
+      storeDataInLocalStorage(mealPlanKey, this.mealPlan)
     }
   },
   getters: {
@@ -104,7 +130,7 @@ export const useMealPlanStore = defineStore({
       return this.mealPlan
     },
     getIngredients(): string {
-      return this.ignredients
+      return this.ingredients
     }
   }
 })
