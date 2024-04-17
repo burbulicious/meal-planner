@@ -30,7 +30,7 @@ const getSingleRecipe = async (recipeId: number): Promise<RecipeExtended> => {
         }
       }
     )
-    const recipe = response.data
+    const recipe: RecipeExtended = response.data
     return recipe
   } catch (error) {
     console.error('Error fetching recipe information:', error)

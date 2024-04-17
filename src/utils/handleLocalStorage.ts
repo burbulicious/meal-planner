@@ -1,3 +1,7 @@
+const mealPlanKey: string = 'mealPlan'
+const ingredientsKey: string = 'ingredients'
+const individualRecipesKey: string = 'individualRecipes'
+
 const storeDataInLocalStorage = (key: string, data: any): Boolean => {
   if (key && data) {
     try {
@@ -24,7 +28,10 @@ const getDataFromLocalStorage = (key: string): any => {
   }
 }
 
-const mealPlanKey: string = 'mealPlan'
-const ingredientsKey: string = 'ingredients'
-
-export { storeDataInLocalStorage, getDataFromLocalStorage, mealPlanKey, ingredientsKey }
+export {
+  storeDataInLocalStorage,
+  getDataFromLocalStorage,
+  mealPlanKey,
+  ingredientsKey,
+  individualRecipesKey
+}

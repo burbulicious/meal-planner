@@ -65,13 +65,7 @@ interface DailyMealPlan {
 
 export type WeeklyMealPlan = {
   week: {
-    monday: DailyMealPlan
-    tuesday: DailyMealPlan
-    wednesday: DailyMealPlan
-    thursday: DailyMealPlan
-    friday: DailyMealPlan
-    saturday: DailyMealPlan
-    sunday: DailyMealPlan
+    [key: string]: DailyMealPlan
   }
 }
 
