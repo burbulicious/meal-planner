@@ -1,18 +1,12 @@
 import { defineStore } from 'pinia'
 import type { WeeklyMealPlan, RecipeExtended } from '@/types/recipes'
-import {
-  getApiMealPlan,
-  getFullRecipes,
-  // getWholeDayNutrion,
-  buildMealsForEachDay
-} from '@/services/fetchRecipes'
+import { getMealPlan, getFullRecipes } from '@/services/fetchRecipes'
 import {
   getDataFromLocalStorage,
   storeDataInLocalStorage,
-  apiMealPlanKey,
+  mealPlanKey,
   ingredientsKey,
-  allRecipesKey,
-  simplifiedMealPlanKey
+  allRecipesKey
 } from '@/utils/handleLocalStorage'
 import itemExists from '@/utils/existsInList'
 
@@ -83,11 +77,8 @@ const initialMealPlanStructure = {
     }
   }
 }
-const initialApiMealPlan: WeeklyMealPlan =
-  getDataFromLocalStorage(apiMealPlanKey) || initialMealPlanStructure
-
-const initialSimplifiedMealPlan: WeeklyMealPlan =
-  getDataFromLocalStorage(simplifiedMealPlanKey) || initialMealPlanStructure
+const initialmealPlan: WeeklyMealPlan =
+  getDataFromLocalStorage(mealPlanKey) || initialMealPlanStructure
 
 const initialIngredients: string =
   (localStorage.getItem(ingredientsKey) as string) || ('' as string)
@@ -97,8 +88,7 @@ const initialRecipes: RecipeExtended[] = getDataFromLocalStorage(allRecipesKey) 
 export const useMealPlanStore = defineStore({
   id: 'mealPlan',
   state: () => ({
-    apiMealPlan: { ...initialApiMealPlan } as WeeklyMealPlan,
-    simplifiedMealPlan: { ...initialSimplifiedMealPlan } as WeeklyMealPlan,
+    mealPlan: { ...initialmealPlan } as WeeklyMealPlan,
     ingredients: initialIngredients,
     allRecipes: initialRecipes as RecipeExtended[]
   }),
@@ -135,25 +125,16 @@ export const useMealPlanStore = defineStore({
       }
       return false
     },
-    async setApiMealPlan() {
-      this.apiMealPlan = await getApiMealPlan(this.ingredients)
-      storeDataInLocalStorage(apiMealPlanKey, this.apiMealPlan)
-      this.allRecipes = await getFullRecipes(this.apiMealPlan)
-      console.log(this.allRecipes)
+    async setMealPlan() {
+      this.mealPlan = await getMealPlan(this.ingredients)
+      storeDataInLocalStorage(mealPlanKey, this.mealPlan)
+      this.allRecipes = await getFullRecipes(this.mealPlan)
       storeDataInLocalStorage(allRecipesKey, this.allRecipes)
-    },
-    generateSimplifiedMealPlan() {
-      this.simplifiedMealPlan = buildMealsForEachDay(this.apiMealPlan, this.allRecipes)
-      console.log(this.simplifiedMealPlan)
-      storeDataInLocalStorage(simplifiedMealPlanKey, this.simplifiedMealPlan)
     }
   },
   getters: {
-    getApiMealPlan(): WeeklyMealPlan {
-      return this.apiMealPlan
-    },
-    getSimplifiedMealPlan(): WeeklyMealPlan {
-      return this.simplifiedMealPlan
+    getMealPlan(): WeeklyMealPlan {
+      return this.mealPlan
     },
     getIngredients(): string {
       return this.ingredients

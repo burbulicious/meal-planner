@@ -61,10 +61,6 @@ type WeeklyMealPlan = {
   }
 }
 
-type DailyMealPlan = {
-  [key: string]: Recipe[]
-}
-
 type MealType = 'breakfast' | 'lunch' | 'dinner'
 
-export type { Recipe, RecipeExtended, WeeklyMealPlan, Nutrients, DailyMealPlan, MealType }
+export type { Recipe, RecipeExtended, WeeklyMealPlan, Nutrients, MealType }

@@ -1,4 +1,4 @@
-const apiMealPlanKey: string = 'apiMealPlan'
+const mealPlanKey: string = 'mealPlan'
 const ingredientsKey: string = 'ingredients'
 const allRecipesKey: string = 'allRecipes'
 const simplifiedMealPlanKey: string = 'simplifiedMealPlan'
@@ -32,7 +32,7 @@ const getDataFromLocalStorage = (key: string): any => {
 export {
   storeDataInLocalStorage,
   getDataFromLocalStorage,
-  apiMealPlanKey,
+  mealPlanKey,
   ingredientsKey,
   allRecipesKey,
   simplifiedMealPlanKey

@@ -65,7 +65,7 @@ watch(
       <li>{{ item }}</li>
     </ul>
   </div>
-  <button class="btn btn__yellow" v-if="ingredientsExists" @click="mealPlanStore.setApiMealPlan">
+  <button class="btn btn__yellow" v-if="ingredientsExists" @click="mealPlanStore.setMealPlan">
     generate new meal plan
   </button>
 </template>

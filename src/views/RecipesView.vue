@@ -4,21 +4,20 @@ import type { WeeklyMealPlan } from '@/types/recipes'
 import { roundUpToNearestInteger } from '@/composables/calculations'
 import { useMealPlanStore } from '@/stores/mealPlanStore'
 import InputNewIngredient from '@/components/InputNewIngredient.vue'
-import { getDataFromLocalStorage, apiMealPlanKey } from '@/utils/handleLocalStorage'
+import { getDataFromLocalStorage, mealPlanKey } from '@/utils/handleLocalStorage'
 
 const mealPlanStore = useMealPlanStore()
 const mealPlanExists = ref<boolean>(false)
-const mealPlan = ref<WeeklyMealPlan>(mealPlanStore.apiMealPlan)
+const mealPlan = ref<WeeklyMealPlan>(mealPlanStore.mealPlan)
 
 onMounted(async () => {
-  if (getDataFromLocalStorage(apiMealPlanKey)) {
+  if (getDataFromLocalStorage(mealPlanKey)) {
     mealPlanExists.value = true
   }
-  mealPlanStore.generateSimplifiedMealPlan()
 })
 
 watch(
-  () => mealPlanStore.apiMealPlan,
+  () => mealPlanStore.mealPlan,
   (newMealPlan) => {
     mealPlan.value = newMealPlan
     if (newMealPlan) {
