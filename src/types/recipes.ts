@@ -20,6 +20,7 @@ type Recipe = {
   title: string
   readyInMinutes: number
   servings: number
+  mealType: MealType
 }
 
 type Nutrients = {
@@ -53,11 +54,9 @@ type RecipeExtended = Recipe & {
 }
 
 type WeeklyMealPlan = {
-  week: {
-    [key: string]: {
-      meals: Recipe[]
-      nutrients: Nutrients
-    }
+  [key: string]: {
+    meals: Recipe[]
+    nutrients: Nutrients
   }
 }
 

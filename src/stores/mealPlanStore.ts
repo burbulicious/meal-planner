@@ -11,72 +11,71 @@ import {
 import itemExists from '@/utils/existsInList'
 
 const initialMealPlanStructure = {
-  week: {
-    monday: {
-      meals: [],
-      nutrients: {
-        calories: 0,
-        protein: 0,
-        fat: 0,
-        carbohydrates: 0
-      }
-    },
-    tuesday: {
-      meals: [],
-      nutrients: {
-        calories: 0,
-        protein: 0,
-        fat: 0,
-        carbohydrates: 0
-      }
-    },
-    wednesday: {
-      meals: [],
-      nutrients: {
-        calories: 0,
-        protein: 0,
-        fat: 0,
-        carbohydrates: 0
-      }
-    },
-    thursday: {
-      meals: [],
-      nutrients: {
-        calories: 0,
-        protein: 0,
-        fat: 0,
-        carbohydrates: 0
-      }
-    },
-    friday: {
-      meals: [],
-      nutrients: {
-        calories: 0,
-        protein: 0,
-        fat: 0,
-        carbohydrates: 0
-      }
-    },
-    saturday: {
-      meals: [],
-      nutrients: {
-        calories: 0,
-        protein: 0,
-        fat: 0,
-        carbohydrates: 0
-      }
-    },
-    sunday: {
-      meals: [],
-      nutrients: {
-        calories: 0,
-        protein: 0,
-        fat: 0,
-        carbohydrates: 0
-      }
+  monday: {
+    meals: [],
+    nutrients: {
+      calories: 0,
+      protein: 0,
+      fat: 0,
+      carbohydrates: 0
+    }
+  },
+  tuesday: {
+    meals: [],
+    nutrients: {
+      calories: 0,
+      protein: 0,
+      fat: 0,
+      carbohydrates: 0
+    }
+  },
+  wednesday: {
+    meals: [],
+    nutrients: {
+      calories: 0,
+      protein: 0,
+      fat: 0,
+      carbohydrates: 0
+    }
+  },
+  thursday: {
+    meals: [],
+    nutrients: {
+      calories: 0,
+      protein: 0,
+      fat: 0,
+      carbohydrates: 0
+    }
+  },
+  friday: {
+    meals: [],
+    nutrients: {
+      calories: 0,
+      protein: 0,
+      fat: 0,
+      carbohydrates: 0
+    }
+  },
+  saturday: {
+    meals: [],
+    nutrients: {
+      calories: 0,
+      protein: 0,
+      fat: 0,
+      carbohydrates: 0
+    }
+  },
+  sunday: {
+    meals: [],
+    nutrients: {
+      calories: 0,
+      protein: 0,
+      fat: 0,
+      carbohydrates: 0
     }
   }
 }
+
 const initialmealPlan: WeeklyMealPlan =
   getDataFromLocalStorage(mealPlanKey) || initialMealPlanStructure
 

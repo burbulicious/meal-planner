@@ -25,7 +25,6 @@ const removeIngredient = () => {
   if (itemExists(newIngredient.value, mealPlanStore.ingredients)) {
     mealPlanStore.removeIngredient(newIngredient.value)
     newIngredient.value = ''
-    console.log(newIngredient.value)
   }
 }
 

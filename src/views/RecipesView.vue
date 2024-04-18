@@ -31,7 +31,7 @@ watch(
 
 <template>
   <div class="grid grid-cols-4" v-if="mealPlanExists">
-    <div v-for="(dayInfo, title) in mealPlan.week" :key="title" class="p-10">
+    <div v-for="(dayInfo, title) in mealPlan" :key="title" class="p-10">
       <h2 class="h2">{{ title }}</h2>
       <ul v-for="(item, index) in dayInfo.meals" :key="item.id">
         <li>
