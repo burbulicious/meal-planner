@@ -15,19 +15,19 @@ type Ingredient = {
     }
   }
 }
-
-type RecipeBase = {
+type Recipe = {
   id: number
   title: string
+  readyInMinutes: number
+  servings: number
+}
+
+type Nutrients = {
+  [key: string]: number
+}
+
+type RecipeExtended = Recipe & {
   image: string
-}
-
-export type Recipe = RecipeBase & {
-  missedIngredients: Ingredient[]
-  unusedIngredients: Ingredient[]
-}
-
-export type RecipeExtended = RecipeBase & {
   extendedIngredients: Ingredient[]
   preparationMinutes: number
   cookingMinutes: number
@@ -42,45 +42,29 @@ export type RecipeExtended = RecipeBase & {
       step: string
     }[]
   }[]
-}
-
-interface Meal {
-  id: number
-  title: string
-  readyInMinutes: number
-  servings: number
-}
-
-interface Nutrients {
-  calories: number
-  protein: number
-  fat: number
-  carbohydrates: number
-}
-
-interface DailyMealPlan {
-  meals: Meal[]
-  nutrients: Nutrients
-}
-
-export type WeeklyMealPlan = {
-  week: {
-    [key: string]: DailyMealPlan
+  nutrition: {
+    nutrients: Nutrients
+    caloricBreakdown: {
+      percentCarbs: number
+      percentFat: number
+      percentProtein: number
+    }
   }
 }
 
-const initialSelectedRecipe = {
-  id: 0,
-  title: '',
-  image: '',
-  extendedIngredients: [],
-  preparationMinutes: 0,
-  cookingMinutes: 0,
-  readyInMinutes: 0,
-  servings: 0,
-  summary: '',
-  instructions: '',
-  analyzedInstructions: []
+type WeeklyMealPlan = {
+  week: {
+    [key: string]: {
+      meals: Recipe[]
+      nutrients: Nutrients
+    }
+  }
 }
 
-export { initialSelectedRecipe }
+type DailyMealPlan = {
+  [key: string]: Recipe[]
+}
+
+type MealType = 'breakfast' | 'lunch' | 'dinner'
+
+export type { Recipe, RecipeExtended, WeeklyMealPlan, Nutrients, DailyMealPlan, MealType }
