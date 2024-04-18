@@ -96,9 +96,6 @@ const buildMealsForEachDay = (
   allRecipes: RecipeExtended[]
 ): WeeklyMealPlan => {
   const selectedMeals = selectMeals(mealPlan)
-  const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
-
-  const week: { [key: string]: { meals: Recipe[]; nutrients: Nutrients } } = {}
   const mealCombinations: DailyMealPlan = {
     monday: [selectedMeals.breakfast1, selectedMeals.lunch1, selectedMeals.dinner1],
     tuesday: [selectedMeals.breakfast1, selectedMeals.lunch1, selectedMeals.dinner2],
@@ -146,18 +143,12 @@ const buildMealsForEachDay = (
 }
 
 const getMealNutrition = (allRecipes: RecipeExtended[], recipeId: number): Nutrients => {
+  const recipe = allRecipes.find((item) => item.id === recipeId)
   return {
-    calories:
-      allRecipes.find((item: RecipeExtended) => item.id === recipeId)?.nutrition.nutrients
-        .calories || 0,
-    protein:
-      allRecipes.find((item: RecipeExtended) => item.id === recipeId)?.nutrition.nutrients
-        .protein || 0,
-    fat:
-      allRecipes.find((item: RecipeExtended) => item.id === recipeId)?.nutrition.nutrients.fat || 0,
-    carbohydrates:
-      allRecipes.find((item: RecipeExtended) => item.id === recipeId)?.nutrition.nutrients
-        .carbohydrates || 0
+    calories: recipe?.nutrition?.nutrients?.calories || 0,
+    protein: recipe?.nutrition?.nutrients?.protein || 0,
+    fat: recipe?.nutrition?.nutrients?.fat || 0,
+    carbohydrates: recipe?.nutrition?.nutrients?.carbohydrates || 0
   }
 }
 

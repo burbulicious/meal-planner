@@ -4,8 +4,7 @@ import {
   getApiMealPlan,
   getFullRecipes,
   // getWholeDayNutrion,
-  buildMealsForEachDay,
-  getWholeDayNutrion
+  buildMealsForEachDay
 } from '@/services/fetchRecipes'
 import {
   getDataFromLocalStorage,
