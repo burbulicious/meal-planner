@@ -70,23 +70,11 @@ const getMealNutrition = (allRecipes: RecipeExtended[], recipeId: number): Nutri
 }
 
 const getMealType = (mealPlan: WeeklyMealPlan, recipeId: number): MealType => {
-  let mealIndex: number = 0
   let mealType: MealType = 'breakfast'
-  Object.keys(mealPlan).forEach((day) => {
-    const dayMeals = mealPlan[day].meals
-    const meal = dayMeals.find((item) => item.id === recipeId)
-    if (meal) {
-      mealIndex = dayMeals.indexOf(meal)
-    }
+  Object.values(mealPlan).forEach((day) => {
+    const meal = day.meals.find((item) => item.id === recipeId)
+    if (meal) mealType = meal.mealType
   })
-  if (mealIndex === 0) {
-    mealType = 'breakfast'
-  } else if (mealIndex === 1) {
-    mealType = 'lunch'
-  } else if (mealIndex === 2) {
-    mealType = 'dinner'
-  }
-
   return mealType
 }
 

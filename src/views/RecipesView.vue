@@ -4,6 +4,7 @@ import type { WeeklyMealPlan } from '@/types/recipes'
 import { roundUpToNearestInteger } from '@/composables/calculations'
 import { useMealPlanStore } from '@/stores/mealPlanStore'
 import InputNewIngredient from '@/components/InputNewIngredient.vue'
+import { getMealNutrition } from '@/services/fetchRecipes'
 import { getDataFromLocalStorage, mealPlanKey } from '@/utils/handleLocalStorage'
 
 const mealPlanStore = useMealPlanStore()
@@ -15,6 +16,10 @@ onMounted(async () => {
     mealPlanExists.value = true
   }
 })
+
+const getMealCalories = (id: number): number => {
+  return roundUpToNearestInteger(getMealNutrition(mealPlanStore.allRecipes, id).calories)
+}
 
 watch(
   () => mealPlanStore.mealPlan,
@@ -33,11 +38,11 @@ watch(
   <div class="grid grid-cols-4" v-if="mealPlanExists">
     <div v-for="(dayInfo, title) in mealPlan" :key="title" class="p-10">
       <h2 class="h2">{{ title }}</h2>
-      <ul v-for="(item, index) in dayInfo.meals" :key="item.id">
+      <ul v-for="item in dayInfo.meals" :key="item.id">
         <li>
-          <span v-if="index === 0">Breakfast</span> <span v-else-if="index === 1">Lunch</span>
-          <span v-else>Dinner</span> {{ item.title }}
-          <span>{{ item.id }}</span>
+          <span>{{ item.mealType }}</span> {{ item.title }} <span>{{ item.id }}</span
+          ><br />
+          <span>{{ getMealCalories(item.id) }}</span>
         </li>
       </ul>
       <ul v-for="(item, title) in dayInfo.nutrients" :key="title">
