@@ -6,7 +6,8 @@ import {
   storeDataInLocalStorage,
   mealPlanKey,
   ingredientsKey,
-  allRecipesKey
+  allRecipesKey,
+  caloriesLimitKey
 } from '@/utils/handleLocalStorage'
 import itemExists from '@/utils/existsInList'
 
@@ -76,6 +77,8 @@ const initialMealPlanStructure = {
   }
 }
 
+const initialCaloriesLimit: number = getDataFromLocalStorage(caloriesLimitKey) || 2000
+
 const initialmealPlan: WeeklyMealPlan =
   getDataFromLocalStorage(mealPlanKey) || initialMealPlanStructure
 
@@ -89,7 +92,8 @@ export const useMealPlanStore = defineStore({
   state: () => ({
     mealPlan: { ...initialmealPlan } as WeeklyMealPlan,
     ingredients: initialIngredients,
-    allRecipes: initialRecipes as RecipeExtended[]
+    allRecipes: initialRecipes as RecipeExtended[],
+    caloriesLimit: initialCaloriesLimit as number
   }),
 
   actions: {
@@ -125,10 +129,14 @@ export const useMealPlanStore = defineStore({
       return false
     },
     async setMealPlan() {
-      this.mealPlan = await getMealPlan(this.ingredients)
+      this.mealPlan = await getMealPlan(this.ingredients, this.caloriesLimit)
       storeDataInLocalStorage(mealPlanKey, this.mealPlan)
       this.allRecipes = await getFullRecipes(this.mealPlan)
       storeDataInLocalStorage(allRecipesKey, this.allRecipes)
+    },
+    setCaloriesLimit(newCaloriesLimit: number) {
+      this.caloriesLimit = newCaloriesLimit
+      storeDataInLocalStorage(caloriesLimitKey, this.caloriesLimit)
     }
   },
   getters: {
@@ -140,6 +148,9 @@ export const useMealPlanStore = defineStore({
     },
     getAllrecipes(): RecipeExtended[] {
       return this.allRecipes
+    },
+    getCaloriesLimit(): number {
+      return this.caloriesLimit
     }
   }
 })

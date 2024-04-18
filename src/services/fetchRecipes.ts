@@ -2,7 +2,6 @@ import axios from 'axios'
 import type { WeeklyMealPlan, RecipeExtended, Nutrients, MealType } from '@/types/recipes'
 
 const apiKey = '45673fe7c19440788b8f4841be2d733e'
-const maxCalories: number = 2000
 
 const formatMealPlan = (data: any): WeeklyMealPlan => {
   const newMealPlan: WeeklyMealPlan = {}
@@ -22,13 +21,13 @@ const formatMealPlan = (data: any): WeeklyMealPlan => {
   return newMealPlan
 }
 
-const getMealPlan = async (ingredients: string): Promise<WeeklyMealPlan> => {
+const getMealPlan = async (ingredients: string, calories: number): Promise<WeeklyMealPlan> => {
   try {
     const response = await axios.get(`https://api.spoonacular.com/mealplanner/generate`, {
       params: {
         apiKey: apiKey,
         timeFrame: 'week',
-        maxCalories: maxCalories,
+        targetCalories: calories,
         diet: 'balanced',
         includeIngredients: ingredients
       }
@@ -122,9 +121,7 @@ const getFullRecipes = async (mealPlan: WeeklyMealPlan): Promise<RecipeExtended[
       params: {
         ids: recipeIds.join(','),
         apiKey: apiKey,
-        includeNutrition: true,
-        maxCalories: 850,
-        minCalories: 600
+        includeNutrition: true
       }
     })
 

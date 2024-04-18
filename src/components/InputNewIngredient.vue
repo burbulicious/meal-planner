@@ -3,6 +3,7 @@ import { ref, computed, onMounted, watch } from 'vue'
 import { useMealPlanStore } from '@/stores/mealPlanStore'
 import itemExists from '@/utils/existsInList'
 import { ingredientsKey } from '@/utils/handleLocalStorage'
+import GenerateMealPlanBtn from './GenerateMealPlanBtn.vue'
 
 const mealPlanStore = useMealPlanStore()
 const newIngredient = ref<string>('')
@@ -15,13 +16,13 @@ const isRemoveButtonDisabled = computed(
   () => !itemExists(newIngredient.value, mealPlanStore.ingredients)
 )
 
-const addIngredient = () => {
+const addIngredient = (): void => {
   if (!itemExists(newIngredient.value, mealPlanStore.ingredients)) {
     mealPlanStore.addIngredient(newIngredient.value)
     newIngredient.value = ''
   }
 }
-const removeIngredient = () => {
+const removeIngredient = (): void => {
   if (itemExists(newIngredient.value, mealPlanStore.ingredients)) {
     mealPlanStore.removeIngredient(newIngredient.value)
     newIngredient.value = ''
@@ -64,7 +65,5 @@ watch(
       <li>{{ item }}</li>
     </ul>
   </div>
-  <button class="btn btn__yellow" v-if="ingredientsExists" @click="mealPlanStore.setMealPlan">
-    generate new meal plan
-  </button>
+  <GenerateMealPlanBtn />
 </template>
