@@ -5,6 +5,7 @@ type Ingredient = {
   unitLong?: string
   unitShort?: string
   name: string
+  nameClean?: string
   originalName: string
   extendedName?: string
   measures?: {
@@ -62,4 +63,4 @@ type WeeklyMealPlan = {
 
 type MealType = 'breakfast' | 'lunch' | 'dinner'
 
-export type { Recipe, RecipeExtended, WeeklyMealPlan, Nutrients, MealType }
+export type { Recipe, RecipeExtended, WeeklyMealPlan, Nutrients, MealType, Ingredient }

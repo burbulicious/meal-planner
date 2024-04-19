@@ -1,5 +1,11 @@
 import axios from 'axios'
-import type { WeeklyMealPlan, RecipeExtended, Nutrients, MealType } from '@/types/recipes'
+import type {
+  WeeklyMealPlan,
+  RecipeExtended,
+  Nutrients,
+  MealType,
+  Ingredient
+} from '@/types/recipes'
 
 const apiKey = '45673fe7c19440788b8f4841be2d733e'
 
@@ -132,4 +138,24 @@ const getFullRecipes = async (mealPlan: WeeklyMealPlan): Promise<RecipeExtended[
   }
 }
 
-export { getMealPlan, getFullRecipes, getSingleFullRecipe, getMealNutrition, getMealType }
+const getFullIngredientList = (allRecipes: RecipeExtended[]): Ingredient[] => {
+  const allIngredients: Ingredient[] = []
+  allRecipes.forEach((item) => {
+    item.extendedIngredients.forEach((ingredient: Ingredient) => {
+      if (!allIngredients.map((item) => item.name).includes(ingredient.name)) {
+        allIngredients.push(ingredient)
+      }
+    })
+  })
+
+  return allIngredients
+}
+
+export {
+  getMealPlan,
+  getFullRecipes,
+  getSingleFullRecipe,
+  getMealNutrition,
+  getMealType,
+  getFullIngredientList
+}

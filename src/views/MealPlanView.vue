@@ -26,8 +26,8 @@ const minCardWidth: string = 'min-w-[280px]'
             <h2 class="label w-full text-center uppercase">{{ day }}</h2>
           </div>
           <ul class="w-full">
-            <li v-for="item in dayInfo.meals" :key="item.id">
-              <RecipeCard :item="item" class="mb-2" />
+            <li v-for="item in dayInfo.meals" :key="item.id" class="mb-2">
+              <RecipeCard :item="item" />
             </li>
           </ul>
         </div>
