@@ -1,41 +1,21 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
+import { computed } from 'vue'
 import type { WeeklyMealPlan } from '@/types/recipes'
 import { roundUpToNearestInteger } from '@/composables/calculations'
 import { useMealPlanStore } from '@/stores/mealPlanStore'
 import { getMealNutrition } from '@/services/fetchRecipes'
-import { getDataFromLocalStorage, mealPlanKey } from '@/utils/handleLocalStorage'
 import InputNewIngredient from '@/components/InputNewIngredient.vue'
 
 const mealPlanStore = useMealPlanStore()
-const mealPlanExists = ref<boolean>(false)
-const mealPlan = ref<WeeklyMealPlan>(mealPlanStore.mealPlan)
-
-onMounted(async () => {
-  if (getDataFromLocalStorage(mealPlanKey)) {
-    mealPlanExists.value = true
-  }
-})
+const mealPlan = computed<WeeklyMealPlan>(() => mealPlanStore.mealPlan)
 
 const getMealCalories = (id: number): number => {
   return roundUpToNearestInteger(getMealNutrition(mealPlanStore.allRecipes, id).calories)
 }
-
-watch(
-  () => mealPlanStore.mealPlan,
-  (newMealPlan) => {
-    mealPlan.value = newMealPlan
-    if (newMealPlan) {
-      mealPlanExists.value = true
-    } else {
-      mealPlanExists.value = false
-    }
-  }
-)
 </script>
 
 <template>
-  <div class="grid grid-cols-4" v-if="mealPlanExists">
+  <div class="grid grid-cols-4" v-if="mealPlan">
     <div v-for="(dayInfo, title) in mealPlan" :key="title" class="p-10">
       <h2 class="h2">{{ title }}</h2>
       <ul v-for="item in dayInfo.meals" :key="item.id">

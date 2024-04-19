@@ -1,69 +1,59 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed } from 'vue'
 import { useMealPlanStore } from '@/stores/mealPlanStore'
-import itemExists from '@/utils/existsInList'
-import { ingredientsKey } from '@/utils/handleLocalStorage'
 import GenerateMealPlanBtn from './GenerateMealPlanBtn.vue'
 
 const mealPlanStore = useMealPlanStore()
-const newIngredient = ref<string>('')
-const ingredientsExists = ref<boolean>(false)
+const ingredients = computed<string>(() => mealPlanStore.ingredients)
 const ingredientsList = computed<string[]>(() => {
-  return mealPlanStore.ingredients.split(',').map((ingredient) => ingredient.trim())
+  const list = ingredients.value.split(', ')
+  return list.map((item) => item.trim())
 })
-const isAddButtonDisabled = computed(() => newIngredient.value === '')
-const isRemoveButtonDisabled = computed(
-  () => !itemExists(newIngredient.value, mealPlanStore.ingredients)
+
+const newIngredient = ref<string>('')
+const itemExistsInIngredients = computed<boolean>(() =>
+  ingredientsList.value
+    .map((item) => item.trim().toLowerCase())
+    .includes(newIngredient.value.trim().toLowerCase())
+)
+const isAddButtonDisabled = computed<boolean>(
+  () => newIngredient.value === '' || itemExistsInIngredients.value
+)
+const isRemoveButtonDisabled = computed<boolean>(
+  () => newIngredient.value === '' || !itemExistsInIngredients.value
 )
 
-const addIngredient = (): void => {
-  if (!itemExists(newIngredient.value, mealPlanStore.ingredients)) {
+const addNewIngredient = () => {
+  if (!itemExistsInIngredients.value) {
     mealPlanStore.addIngredient(newIngredient.value)
     newIngredient.value = ''
   }
 }
-const removeIngredient = (): void => {
-  if (itemExists(newIngredient.value, mealPlanStore.ingredients)) {
+const removeExistingIngredient = () => {
+  if (itemExistsInIngredients.value) {
     mealPlanStore.removeIngredient(newIngredient.value)
     newIngredient.value = ''
   }
 }
-
-onMounted(async () => {
-  if (localStorage.getItem(ingredientsKey)) {
-    ingredientsExists.value = true
-  }
-})
-
-watch(
-  () => mealPlanStore.ingredients,
-  (newValue) => {
-    if (newValue) {
-      ingredientsExists.value = true
-    } else {
-      ingredientsExists.value = false
-    }
-  }
-)
 </script>
 
 <template>
   <input type="text" class="bg-transparent border-white border mb-6" v-model="newIngredient" />
-  <button class="btn btn__yellow" @click="addIngredient" :disabled="isAddButtonDisabled">
-    add ingredient
-  </button>
-  <button
-    class="btn btn__yellow"
-    v-if="ingredientsExists"
-    @click="removeIngredient"
-    :disabled="isRemoveButtonDisabled"
-  >
-    remove ingredient
-  </button>
-  <div v-if="ingredientsExists">
+  <div v-if="!!ingredientsList">
     <ul v-for="item in ingredientsList" :key="item">
       <li>{{ item }}</li>
     </ul>
   </div>
-  <GenerateMealPlanBtn />
+  <button class="btn btn__yellow" :disabled="isAddButtonDisabled" @click="addNewIngredient">
+    add ingredient
+  </button>
+  <button
+    class="btn btn__yellow"
+    v-if="ingredients"
+    :disabled="isRemoveButtonDisabled"
+    @click="removeExistingIngredient"
+  >
+    remove ingredient
+  </button>
+  <GenerateMealPlanBtn v-if="ingredients" />
 </template>

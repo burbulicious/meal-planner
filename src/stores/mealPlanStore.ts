@@ -112,7 +112,7 @@ export const useMealPlanStore = defineStore({
         localStorage.setItem(ingredientsKey, this.ingredients)
         return true
       }
-      return false
+      return
     },
     removeIngredient(inputIngredient: string) {
       const ingredientToRemove: string = inputIngredient.trim()
