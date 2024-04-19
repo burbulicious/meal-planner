@@ -14,8 +14,14 @@ const allRecipes = computed<RecipeExtended[]>(() => mealPlanStore.allRecipes)
       <h1 class="h1 text-center">Recipes</h1>
     </div>
     <div v-if="allRecipes" class="container">
-      <ul class="grid grid-cols-4">
-        <RecipeCard v-for="item in allRecipes" :key="item.id" :item :hideLinkBtn="false" />
+      <ul class="grid grid-cols-4 gap-5">
+        <RecipeCard
+          v-for="item in allRecipes"
+          :key="item.id"
+          :item
+          :hideLinkBtn="false"
+          :showImage="true"
+        />
       </ul>
     </div>
   </main>
