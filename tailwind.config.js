@@ -15,8 +15,10 @@ export default {
           DEFAULT: '#ffd000',
           100: '#f6f2dd'
         },
+        violet: '#4E148C',
+        magenta: '#D90866',
         green: {
-          DEFAULT: '#73a46e',
+          DEFAULT: '#2D9F64',
           light: '#edf7e7'
         },
         red: {

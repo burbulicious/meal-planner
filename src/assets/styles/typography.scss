@@ -9,31 +9,25 @@ body {
 
 h1,
 .h1 {
-  @apply text-2xl lg:text-[28px] leading-tight font-semibold;
+  @apply text-2xl md:text-3xl lg:text-[40px] leading-tight font-bold;
 }
 
 h2,
 .h2 {
-  @apply text-[20px] leading-tight font-semibold;
+  @apply text-[20px] lg:text-[28px] leading-tight font-normal;
 }
 
 h3,
 .h3 {
-  @apply text-base leading-tight font-normal;
-}
-
-h4,
-.h4 {
-  @apply text-base leading-tight font-semibold tracking-widest;
-}
-
-h5,
-.h5 {
-  @apply text-[12px] leading-tight font-normal uppercase;
+  @apply text-base leading-tight font-semibold;
 }
 
 p {
   @apply text-base leading-normal;
+}
+
+.label {
+  @apply text-[12px] leading-none;
 }
 
 a {
