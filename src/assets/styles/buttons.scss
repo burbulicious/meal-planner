@@ -64,12 +64,18 @@
     .replay-icon {
       transform: rotate(-45deg);
     }
+    &:disabled {
+      transform: translateY(0);
+    }
   }
 }
 
 .btn-inline {
   transition: all 0.3s ease;
   @apply p-0 text-base lg:text-lg leading-none w-fit cursor-pointer;
+  &:disabled {
+    @apply opacity-50 text-white;
+  }
 
   transform: translateY(0);
 
@@ -87,5 +93,8 @@
 
   &:hover {
     transform: translateY(-2px);
+    &:disabled {
+      transform: translateY(0);
+    }
   }
 }

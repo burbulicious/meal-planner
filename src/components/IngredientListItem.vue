@@ -3,8 +3,8 @@ import { ref, watch } from 'vue'
 import { useMealPlanStore } from '@/stores/mealPlanStore'
 
 const props = defineProps({
-  item: {
-    type: Object
+  text: {
+    type: String
   },
   isChecked: {
     type: Boolean
@@ -12,12 +12,22 @@ const props = defineProps({
   simple: {
     type: Boolean,
     default: false
+  },
+  showMetrics: {
+    type: Boolean,
+    default: true
+  },
+  amount: {
+    type: Number || String
+  },
+  unit: {
+    type: String
   }
 })
 
 const mealPlanStore = useMealPlanStore()
-
 const isActive = ref<boolean>(props.isChecked)
+
 const updateIngredients = (event: any): void => {
   const ingredient = event.target.value
   isActive.value = !isActive.value
@@ -44,28 +54,26 @@ watch(
     >
       <input
         type="checkbox"
-        :value="item?.nameClean"
+        :value="text"
         class="mr-2 checkmark"
         :checked="isActive"
         @click="updateIngredients($event)"
       />
       <span class="custom-checkbox"></span>
-      <span>{{
-        `${item?.measures.metric.amount} ${item?.measures.metric.unitLong} ${item?.nameClean} `
-      }}</span>
+      <span>{{ `${showMetrics ? `${amount} ${unit}` : ''} ${text}` }}</span>
     </label>
   </li>
   <li v-else>
     <label class="flex flex-row items-start">
       <input
         type="checkbox"
-        :value="item?.nameClean"
+        :value="text"
         class="mr-2 checkmark"
         :checked="isActive"
         @click="updateIngredients($event)"
       />
-      <span class="custom-checkbox"></span>
-      <span :class="isActive ? 'text-green line-through' : ''">{{ item?.nameClean }}</span>
+      <span class="custom-checkbox mt-1"></span>
+      <span :class="isActive ? 'text-green line-through' : ''">{{ text }}</span>
     </label>
   </li>
 </template>
@@ -75,7 +83,7 @@ input[type='checkbox'] {
 }
 
 .custom-checkbox {
-  @apply relative inline-block w-4 h-4 border border-green rounded mr-2 mt-1 flex-none;
+  @apply relative inline-block w-4 h-4 border border-green rounded mr-2  flex-none;
 }
 
 .custom-checkbox::before {

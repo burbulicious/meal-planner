@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import type { WeeklyMealPlan, RecipeExtended, MealType, Ingredient } from '@/types/recipes'
-import { getMealPlan, getFullRecipes, getFullIngredientList } from '@/services/fetchRecipes'
+import { generateMealPlan, getFullRecipes, getFullIngredientList } from '@/services/fetchRecipes'
 import {
   getDataFromLocalStorage,
   storeDataInLocalStorage,
@@ -124,7 +124,7 @@ export const useMealPlanStore = defineStore({
       }
     },
     async setMealPlan(): Promise<void> {
-      this.mealPlan = await getMealPlan(this.ingredients, this.caloriesLimit)
+      this.mealPlan = await generateMealPlan(this.ingredients, this.caloriesLimit)
       storeDataInLocalStorage(mealPlanKey, this.mealPlan)
       this.allRecipes = await getFullRecipes(this.mealPlan)
       storeDataInLocalStorage(allRecipesKey, this.allRecipes)

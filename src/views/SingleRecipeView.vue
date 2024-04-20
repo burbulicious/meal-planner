@@ -15,6 +15,7 @@ const allRecipes = computed<RecipeExtended[]>(() => mealPlanStore.allRecipes)
 const currentRecipe = ref<RecipeExtended | undefined>(
   allRecipes.value.find((item) => item.title === route.params.title.toString().replace(/%2F/g, '/'))
 )
+const myIngredients = computed<string>(() => mealPlanStore.ingredients)
 
 onMounted(() => {
   if (!currentRecipe.value) {
@@ -110,7 +111,10 @@ const handleImageError = () => {
               :key="index"
               class="mb-2"
               :item
-              :isChecked="mealPlanStore.ingredients.includes(item.nameClean!)"
+              :text="item.name"
+              :isChecked="myIngredients.includes(item.name)"
+              :amount="item.measures?.metric.amount"
+              :unit="item.measures?.metric.unitShort"
             />
           </ul>
         </div>

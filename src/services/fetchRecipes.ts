@@ -9,6 +9,27 @@ import type {
 
 const apiKey = '45673fe7c19440788b8f4841be2d733e'
 
+const findSimilarIngredients = async (ingredients: string): Promise<string> => {
+  const response = await axios.get('https://api.spoonacular.com/recipes/findByIngredients', {
+    params: {
+      apiKey: apiKey,
+      ingredients: ingredients,
+      number: 5,
+      ignorePantry: true
+    }
+  })
+  const recipeIngredients: string[] = []
+  response.data.forEach((item: any) => {
+    item.usedIngredients.forEach((ingredient: any) => {
+      recipeIngredients.push(ingredient.name)
+    })
+    item.unusedIngredients.forEach((ingredient: any) => {
+      recipeIngredients.push(ingredient.name)
+    })
+  })
+  return recipeIngredients.join(', ')
+}
+
 const formatMealPlan = (data: any): WeeklyMealPlan => {
   const newMealPlan: WeeklyMealPlan = {}
   Object.keys(data.week).forEach((day) => {
@@ -27,15 +48,17 @@ const formatMealPlan = (data: any): WeeklyMealPlan => {
   return newMealPlan
 }
 
-const getMealPlan = async (ingredients: string, calories: number): Promise<WeeklyMealPlan> => {
+const generateMealPlan = async (ingredients: string, calories: number): Promise<WeeklyMealPlan> => {
   try {
+    const similarIngredients: string = await findSimilarIngredients(ingredients)
     const response = await axios.get(`https://api.spoonacular.com/mealplanner/generate`, {
       params: {
         apiKey: apiKey,
         timeFrame: 'week',
         targetCalories: calories,
         diet: 'balanced',
-        includeIngredients: ingredients
+        includeIngredients: similarIngredients,
+        ignorePantry: true
       }
     })
 
@@ -152,7 +175,7 @@ const getFullIngredientList = (allRecipes: RecipeExtended[]): Ingredient[] => {
 }
 
 export {
-  getMealPlan,
+  generateMealPlan,
   getFullRecipes,
   getSingleFullRecipe,
   getMealNutrition,

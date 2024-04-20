@@ -1,7 +1,3 @@
-<script setup lang="ts">
-import InputNewIngredient from '@/components/InputNewIngredient.vue'
-</script>
+<script setup lang="ts"></script>
 
-<template>
-  <InputNewIngredient />
-</template>
+<template>Onboarding</template>
