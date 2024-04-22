@@ -113,7 +113,9 @@ export const useMealPlanStore = defineStore({
 
   actions: {
     setCombinedIngredients() {
-      const updatedCombinedIngredients: CombinedIngredient[] = this.combinedIngredients
+      const updatedCombinedIngredients: CombinedIngredient[] = this.combinedIngredients.filter(
+        (item) => item.name
+      )
       const myIngredientsList: string[] = this.getIngredients
         .split(',')
         .map((item) => item.trim().toLowerCase())
@@ -138,8 +140,13 @@ export const useMealPlanStore = defineStore({
       let updatedIngredients: string = ''
       if (this.ingredients) {
         const ingredientsList: string[] = this.ingredients.toLowerCase().split(',')
-        if (!ingredientsList.find((item) => item.trim() === ingredientToAdd)) {
+        if (
+          !ingredientsList.find((item) => item.trim() === ingredientToAdd) &&
+          ingredientToAdd !== ''
+        ) {
           updatedIngredients = this.ingredients + `, ${ingredientToAdd}`
+        } else {
+          updatedIngredients = this.ingredients
         }
       } else {
         updatedIngredients = ingredientToAdd
@@ -194,7 +201,7 @@ export const useMealPlanStore = defineStore({
         .split(',')
         .map((item) => item.trim().toLowerCase())
       this.extractedIngredients.forEach((item) => {
-        if (!myIngredientsList.includes(item.name)) {
+        if (!myIngredientsList.includes(item.name) || item.name !== '') {
           updatedCombinedIngredients.push({ name: item.name, isChecked: false })
         }
       })

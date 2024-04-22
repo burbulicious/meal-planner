@@ -28,21 +28,18 @@ const checkedIngredients = computed<CombinedIngredient[]>(() =>
 )
 
 const newIngredient = ref<string>('')
-const inputExistsInIngredients = computed<boolean>(
+
+const isAddButtonDisabled = computed<boolean>(
   () =>
+    newIngredient.value === '' ||
     checkedIngredients.value
       .map((item) => item.name)
       .includes(newIngredient.value.trim().toLowerCase()) ||
     myIngredients.value.includes(newIngredient.value)
 )
-const isAddButtonDisabled = computed<boolean>(
-  () => newIngredient.value === '' || inputExistsInIngredients.value
-)
 const addNewIngredient = () => {
-  if (!inputExistsInIngredients.value) {
-    mealPlanStore.addIngredient(newIngredient.value)
-    newIngredient.value = ''
-  }
+  mealPlanStore.addIngredient(newIngredient.value)
+  newIngredient.value = ''
 }
 
 handleKeyDown(addNewIngredient, 'Enter')
