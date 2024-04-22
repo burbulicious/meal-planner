@@ -1,5 +1,11 @@
 import { defineStore } from 'pinia'
-import type { WeeklyMealPlan, RecipeExtended, MealType, Ingredient } from '@/types/recipes'
+import type {
+  WeeklyMealPlan,
+  RecipeExtended,
+  MealType,
+  Ingredient,
+  CombinedIngredient
+} from '@/types/recipes'
 import { generateMealPlan, getFullRecipes, getFullIngredientList } from '@/services/fetchRecipes'
 import {
   getDataFromLocalStorage,
@@ -8,7 +14,8 @@ import {
   ingredientsKey,
   allRecipesKey,
   caloriesLimitKey,
-  allExtractedIngredientsKey
+  allExtractedIngredientsKey,
+  combinedIngredientsKey
 } from '@/utils/handleLocalStorage'
 
 const initialMealPlanStructure = {
@@ -84,6 +91,14 @@ const initialIngredients: string =
 const initialRecipes: RecipeExtended[] = getDataFromLocalStorage(allRecipesKey) || []
 const initialExtractedIngredients: Ingredient[] =
   getDataFromLocalStorage(allExtractedIngredientsKey) || []
+const initialCombinedIngredients: CombinedIngredient[] = getDataFromLocalStorage(
+  combinedIngredientsKey
+) || [
+  {
+    name: '',
+    isChecked: false
+  }
+]
 
 export const useMealPlanStore = defineStore({
   id: 'mealPlan',
@@ -92,35 +107,68 @@ export const useMealPlanStore = defineStore({
     ingredients: initialIngredients,
     allRecipes: initialRecipes as RecipeExtended[],
     caloriesLimit: initialCaloriesLimit as number,
-    extractedIngredients: initialExtractedIngredients as Ingredient[]
+    extractedIngredients: initialExtractedIngredients as Ingredient[],
+    combinedIngredients: initialCombinedIngredients as CombinedIngredient[]
   }),
 
   actions: {
+    setCombinedIngredients() {
+      const updatedCombinedIngredients: CombinedIngredient[] = this.combinedIngredients
+      const myIngredientsList: string[] = this.getIngredients
+        .split(',')
+        .map((item) => item.trim().toLowerCase())
+      myIngredientsList.forEach((item) => {
+        const currentItem: CombinedIngredient | undefined = updatedCombinedIngredients.find(
+          (ingredient) => ingredient.name === item
+        )
+        if (!currentItem) {
+          updatedCombinedIngredients.push({ name: item, isChecked: true })
+        }
+      })
+      this.combinedIngredients = updatedCombinedIngredients
+      storeDataInLocalStorage(combinedIngredientsKey, this.combinedIngredients)
+    },
     setIngredients(updatedIngredients: string) {
       this.ingredients = updatedIngredients
       localStorage.setItem(ingredientsKey, this.ingredients)
+      this.setCombinedIngredients()
     },
     addIngredient(newIngredient: string) {
       const ingredientToAdd: string = newIngredient.trim().toLowerCase()
-      const ingredientsList: string[] = this.ingredients.toLowerCase().split(',')
-      if (!ingredientsList.find((item) => item.trim() === ingredientToAdd)) {
-        if (this.ingredients) {
-          this.ingredients += `, ${ingredientToAdd}`
-        } else {
-          this.ingredients = ingredientToAdd
+      let updatedIngredients: string = ''
+      if (this.ingredients) {
+        const ingredientsList: string[] = this.ingredients.toLowerCase().split(',')
+        if (!ingredientsList.find((item) => item.trim() === ingredientToAdd)) {
+          updatedIngredients = this.ingredients + `, ${ingredientToAdd}`
         }
-        localStorage.setItem(ingredientsKey, this.ingredients)
+      } else {
+        updatedIngredients = ingredientToAdd
       }
+      this.setIngredients(updatedIngredients)
+      this.combinedIngredients = this.combinedIngredients.map((item) => {
+        if (item.name === newIngredient) {
+          return { name: item.name, isChecked: true }
+        }
+        return item
+      })
+      this.setCombinedIngredients()
     },
     removeIngredient(inputIngredient: string) {
-      const ingredientToRemove: string = inputIngredient.trim()
+      const ingredientToRemove: string = inputIngredient.trim().toLowerCase()
       const ingredientsList: string[] = this.ingredients.toLowerCase().split(',')
-      if (ingredientsList.find((item) => item.trim() === ingredientToRemove)) {
-        this.ingredients = ingredientsList
+      if (ingredientsList.find((item) => item.trim().toLowerCase() === ingredientToRemove)) {
+        const updatedIngredients: string = ingredientsList
           .map((item) => item.trim())
           .filter((item) => item !== ingredientToRemove)
           .join(', ')
-        localStorage.setItem(ingredientsKey, this.ingredients)
+        this.setIngredients(updatedIngredients)
+        this.combinedIngredients = this.combinedIngredients.map((item) => {
+          if (item.name === inputIngredient) {
+            return { name: item.name, isChecked: false }
+          }
+          return item
+        })
+        this.setCombinedIngredients()
       }
     },
     async setMealPlan(): Promise<void> {
@@ -141,6 +189,16 @@ export const useMealPlanStore = defineStore({
       const extractedIngredients = getFullIngredientList(this.allRecipes)
       this.extractedIngredients = extractedIngredients
       storeDataInLocalStorage(allExtractedIngredientsKey, this.extractedIngredients)
+      const updatedCombinedIngredients: CombinedIngredient[] = this.combinedIngredients
+      const myIngredientsList: string[] = this.getIngredients
+        .split(',')
+        .map((item) => item.trim().toLowerCase())
+      this.extractedIngredients.forEach((item) => {
+        if (!myIngredientsList.includes(item.name)) {
+          updatedCombinedIngredients.push({ name: item.name, isChecked: false })
+        }
+      })
+      this.combinedIngredients = updatedCombinedIngredients
     }
   },
   getters: {

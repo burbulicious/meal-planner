@@ -13,7 +13,7 @@ const isActive = computed<boolean>(() => props.isActive)
 </script>
 
 <template>
-  <button type="button" class="tab-item" :class="isActive ? 'active' : ''">
+  <button type="button" class="tab-item" :class="{ active: isActive }">
     {{ text }}
   </button>
 </template>

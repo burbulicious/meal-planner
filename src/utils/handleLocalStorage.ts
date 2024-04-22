@@ -3,6 +3,7 @@ const ingredientsKey: string = 'ingredients'
 const allRecipesKey: string = 'allRecipes'
 const caloriesLimitKey: string = 'caloriesLimit'
 const allExtractedIngredientsKey: string = 'allExtractedIngredients'
+const combinedIngredientsKey: string = 'combinedIngredients'
 
 const storeDataInLocalStorage = (key: string, data: any): Boolean => {
   if (key && data) {
@@ -37,5 +38,6 @@ export {
   ingredientsKey,
   allRecipesKey,
   allExtractedIngredientsKey,
-  caloriesLimitKey
+  caloriesLimitKey,
+  combinedIngredientsKey
 }

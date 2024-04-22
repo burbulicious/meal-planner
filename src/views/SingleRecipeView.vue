@@ -29,6 +29,17 @@ const imageUrl = ref<string>(
 const handleImageError = () => {
   imageUrl.value = defaultMealImage
 }
+
+const roundAmount = (number: number | undefined): number => {
+  if (number) {
+    const decimalPart = number.toString().split('.')[1]
+    if (decimalPart && decimalPart.length > 2) {
+      return parseFloat(number.toFixed(1))
+    }
+    return number
+  }
+  return 0
+}
 </script>
 
 <template>
@@ -113,7 +124,7 @@ const handleImageError = () => {
               :item
               :text="item.name"
               :isChecked="myIngredients.includes(item.name)"
-              :amount="item.measures?.metric.amount"
+              :amount="roundAmount(item.measures?.metric.amount)"
               :unit="item.measures?.metric.unitShort"
             />
           </ul>

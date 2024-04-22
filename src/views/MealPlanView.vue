@@ -50,7 +50,10 @@ const minCardWidth: string = 'min-w-[280px]'
       <RouterLink to="/shopping-list" class="mx-2"
         ><ButtonComponent buttonText="See shopping list "
       /></RouterLink>
-      <GenerateMealPlanBtn btnClasses="btn btn__white__outlined mx-2" />
+      <GenerateMealPlanBtn
+        btnClasses="btn btn__white__outlined mx-2"
+        buttonText="Regenerate meal plan"
+      />
     </div>
   </main>
 </template>

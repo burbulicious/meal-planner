@@ -22,10 +22,12 @@ const props = defineProps({
 const route = useRoute()
 const router = useRouter()
 const mealPlanStore = useMealPlanStore()
-const ingredientsExists = computed<boolean>(() => !!mealPlanStore.ingredients)
+const ingredientsExists = computed<boolean>(
+  () => !!mealPlanStore.combinedIngredients.find((item) => item.isChecked)
+)
 
-const generateMealPlan = (): void => {
-  mealPlanStore.setMealPlan()
+const generateMealPlan = async () => {
+  await mealPlanStore.setMealPlan()
   if (route.path !== '/meal-plan' && props.redirectToMealPlan) {
     router.push('/meal-plan')
   }

@@ -37,7 +37,7 @@ const getMealCalories = (id: number): number => {
   <RouterLink :to="`/recipes/${item.title.replace(/\//g, '%2F')}`" class="h-full">
     <div
       class="border border-grey-850 rounded-lg bg-black h-full relative"
-      :class="hideLinkBtn ? 'show-link-on-hover' : ''"
+      :class="hideLinkBtn ? 'show-link-on-hover' : 'show-link'"
     >
       <div v-if="showImage" class="w-full h-[160px] rounded-lg overflow-hidden">
         <img
@@ -82,6 +82,14 @@ const getMealCalories = (id: number): number => {
       .hidden-recipe-link {
         @apply opacity-100;
       }
+    }
+  }
+}
+
+.show-link {
+  &:hover {
+    .visible-recipe-link {
+      @apply text-yellow opacity-100;
     }
   }
 }

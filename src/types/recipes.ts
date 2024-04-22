@@ -8,6 +8,7 @@ type Ingredient = {
   nameClean?: string
   originalName: string
   extendedName?: string
+  aisle: string
   measures?: {
     metric: {
       amount: number
@@ -61,6 +62,19 @@ type WeeklyMealPlan = {
   }
 }
 
+type CombinedIngredient = {
+  name: string
+  isChecked: boolean
+}
+
 type MealType = 'breakfast' | 'lunch' | 'dinner'
 
-export type { Recipe, RecipeExtended, WeeklyMealPlan, Nutrients, MealType, Ingredient }
+export type {
+  Recipe,
+  RecipeExtended,
+  WeeklyMealPlan,
+  Nutrients,
+  MealType,
+  Ingredient,
+  CombinedIngredient
+}

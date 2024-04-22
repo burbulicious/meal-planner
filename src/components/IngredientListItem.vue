@@ -44,6 +44,13 @@ watch(
     isActive.value = newValue
   }
 )
+
+watch(
+  () => props.isChecked,
+  (newValue) => {
+    isActive.value = newValue
+  }
+)
 </script>
 
 <template>
@@ -73,7 +80,7 @@ watch(
         @click="updateIngredients($event)"
       />
       <span class="custom-checkbox mt-1"></span>
-      <span :class="isActive ? 'text-green line-through' : ''">{{ text }}</span>
+      <span :class="{ 'text-green line-through': isActive }">{{ text }}</span>
     </label>
   </li>
 </template>

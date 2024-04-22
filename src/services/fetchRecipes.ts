@@ -163,6 +163,7 @@ const getFullRecipes = async (mealPlan: WeeklyMealPlan): Promise<RecipeExtended[
 
 const getFullIngredientList = (allRecipes: RecipeExtended[]): Ingredient[] => {
   const allIngredients: Ingredient[] = []
+
   allRecipes.forEach((item) => {
     item.extendedIngredients.forEach((ingredient: Ingredient) => {
       if (!allIngredients.map((item) => item.name).includes(ingredient.name)) {
