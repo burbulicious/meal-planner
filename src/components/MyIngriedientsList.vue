@@ -24,7 +24,7 @@ const myIngredients = computed<string[]>(() =>
   mealPlanStore.ingredients.split(',').map((item) => item.trim().toLowerCase())
 )
 const checkedIngredients = computed<CombinedIngredient[]>(() =>
-  ingredientsList.value.filter((item) => item.isChecked)
+  ingredientsList.value.filter((item) => item.isChecked && item.name)
 )
 
 const newIngredient = ref<string>('')
@@ -43,7 +43,7 @@ const addNewIngredient = () => {
 }
 
 handleKeyDown(addNewIngredient, 'Enter')
-
+console.log(checkedIngredients.value)
 watch(
   () => mealPlanStore.combinedIngredients,
   (newValue) => {
@@ -71,7 +71,7 @@ watch(
       v-if="showBtn"
     />
   </div>
-  <div v-if="checkedIngredients">
+  <div v-if="checkedIngredients.length !== 0">
     <ul v-for="(item, index) in ingredientsList" :key="index">
       <IngredientListItem
         class="mb-2 h-full"
