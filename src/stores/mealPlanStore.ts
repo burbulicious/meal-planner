@@ -127,7 +127,17 @@ export const useMealPlanStore = defineStore({
           updatedCombinedIngredients.push({ name: item, isChecked: true })
         }
       })
-      this.combinedIngredients = updatedCombinedIngredients
+      this.combinedIngredients = updatedCombinedIngredients.reduce(
+        (uniqueItems: CombinedIngredient[], currentItem: CombinedIngredient) => {
+          const isDuplicate = uniqueItems.some((item) => item.name === currentItem.name)
+          if (!isDuplicate) {
+            uniqueItems.push(currentItem)
+          }
+
+          return uniqueItems
+        },
+        []
+      )
       storeDataInLocalStorage(combinedIngredientsKey, this.combinedIngredients)
     },
     setIngredients(updatedIngredients: string) {
