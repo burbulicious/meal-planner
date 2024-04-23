@@ -12,22 +12,22 @@ const ingredientsList = computed<CombinedIngredient[]>(() =>
 </script>
 
 <template>
-  <main>
-    <div class="container pb-10">
+  <main class="px-4 pb-20">
+    <div class="container pb-8">
       <h1 class="h1 text-center">Shopping List</h1>
     </div>
-    <div class="container pb-20 grid gap-16 grid-cols-4">
-      <div class="col-span-1">
+    <div class="container md:grid gap-8 xl:gap-16 md:grid-cols-12 w-full">
+      <div class="col-span-5 lg:col-span-3 md:block hidden w-full">
         <h2 class="h3 mb-6">In your pantry</h2>
         <MyIngriedientsList :wide="false" :showBtn="false" />
       </div>
-      <div class="col-span-3">
+      <div class="w-full md:col-span-7 lg:col-span-9">
         <h2 class="h3 mb-6">All your need for the recipes</h2>
-        <div class="grid gap-2 grid-cols-4">
+        <div class="grid gap-2 sm:gap-3 grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           <ul v-for="(item, index) in ingredientsList" :key="index">
             <IngredientListItem
               :key="index"
-              class="mb-2 h-full"
+              class="h-full"
               :text="item.name"
               :isChecked="item.isChecked"
               :simple="true"

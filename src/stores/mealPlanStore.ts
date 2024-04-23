@@ -86,8 +86,7 @@ const initialMealPlanStructure = {
 const initialCaloriesLimit: number = getDataFromLocalStorage(caloriesLimitKey) || 2000
 const initialmealPlan: WeeklyMealPlan =
   getDataFromLocalStorage(mealPlanKey) || initialMealPlanStructure
-const initialIngredients: string =
-  (localStorage.getItem(ingredientsKey) as string) || ('' as string)
+const initialIngredients: string[] = getDataFromLocalStorage(ingredientsKey) || []
 const initialRecipes: RecipeExtended[] = getDataFromLocalStorage(allRecipesKey) || []
 const initialExtractedIngredients: Ingredient[] =
   getDataFromLocalStorage(allExtractedIngredientsKey) || []
@@ -104,7 +103,7 @@ export const useMealPlanStore = defineStore({
   id: 'mealPlan',
   state: () => ({
     mealPlan: { ...initialmealPlan } as WeeklyMealPlan,
-    ingredients: initialIngredients,
+    ingredients: initialIngredients as string[],
     allRecipes: initialRecipes as RecipeExtended[],
     caloriesLimit: initialCaloriesLimit as number,
     extractedIngredients: initialExtractedIngredients as Ingredient[],
@@ -116,10 +115,7 @@ export const useMealPlanStore = defineStore({
       const updatedCombinedIngredients: CombinedIngredient[] = this.combinedIngredients.filter(
         (item) => item.name
       )
-      const myIngredientsList: string[] = this.getIngredients
-        .split(',')
-        .map((item) => item.trim().toLowerCase())
-      myIngredientsList.forEach((item) => {
+      this.getIngredients.forEach((item) => {
         const currentItem: CombinedIngredient | undefined = updatedCombinedIngredients.find(
           (ingredient) => ingredient.name === item
         )
@@ -140,26 +136,24 @@ export const useMealPlanStore = defineStore({
       )
       storeDataInLocalStorage(combinedIngredientsKey, this.combinedIngredients)
     },
-    setIngredients(updatedIngredients: string) {
+    setIngredients(updatedIngredients: string[]) {
       this.ingredients = updatedIngredients
-      localStorage.setItem(ingredientsKey, this.ingredients)
+      storeDataInLocalStorage(ingredientsKey, this.ingredients)
       this.setCombinedIngredients()
     },
     addIngredient(newIngredient: string) {
       const ingredientToAdd: string = newIngredient.trim().toLowerCase()
-      let updatedIngredients: string = ''
+      let updatedIngredients: string[] = []
       if (this.ingredients) {
-        const ingredientsList: string[] = this.ingredients.toLowerCase().split(',')
+        updatedIngredients = this.ingredients
         if (
-          !ingredientsList.find((item) => item.trim() === ingredientToAdd) &&
+          !this.ingredients.find((item) => item.trim() === ingredientToAdd) &&
           ingredientToAdd !== ''
         ) {
-          updatedIngredients = this.ingredients + `, ${ingredientToAdd}`
-        } else {
-          updatedIngredients = this.ingredients
+          updatedIngredients.push(ingredientToAdd)
         }
       } else {
-        updatedIngredients = ingredientToAdd
+        updatedIngredients = [ingredientToAdd]
       }
       this.setIngredients(updatedIngredients)
       this.combinedIngredients = this.combinedIngredients.map((item) => {
@@ -172,12 +166,10 @@ export const useMealPlanStore = defineStore({
     },
     removeIngredient(inputIngredient: string) {
       const ingredientToRemove: string = inputIngredient.trim().toLowerCase()
-      const ingredientsList: string[] = this.ingredients.toLowerCase().split(',')
-      if (ingredientsList.find((item) => item.trim().toLowerCase() === ingredientToRemove)) {
-        const updatedIngredients: string = ingredientsList
-          .map((item) => item.trim())
-          .filter((item) => item !== ingredientToRemove)
-          .join(', ')
+      if (this.ingredients.find((item) => item.trim().toLowerCase() === ingredientToRemove)) {
+        const updatedIngredients: string[] = this.ingredients.filter(
+          (item) => item !== ingredientToRemove
+        )
         this.setIngredients(updatedIngredients)
         this.combinedIngredients = this.combinedIngredients.map((item) => {
           if (item.name === inputIngredient) {
@@ -207,11 +199,9 @@ export const useMealPlanStore = defineStore({
       this.extractedIngredients = extractedIngredients
       storeDataInLocalStorage(allExtractedIngredientsKey, this.extractedIngredients)
       const updatedCombinedIngredients: CombinedIngredient[] = this.combinedIngredients
-      const myIngredientsList: string[] = this.getIngredients
-        .split(',')
-        .map((item) => item.trim().toLowerCase())
+
       this.extractedIngredients.forEach((item) => {
-        if (!myIngredientsList.includes(item.name) || item.name !== '') {
+        if (!this.getIngredients.includes(item.name) || item.name !== '') {
           updatedCombinedIngredients.push({ name: item.name, isChecked: false })
         }
       })
@@ -222,7 +212,7 @@ export const useMealPlanStore = defineStore({
     getMealPlan(): WeeklyMealPlan {
       return this.mealPlan
     },
-    getIngredients(): string {
+    getIngredients(): string[] {
       return this.ingredients
     },
     getAllrecipes(): RecipeExtended[] {

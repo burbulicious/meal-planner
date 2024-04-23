@@ -15,11 +15,11 @@ const minCardWidth: string = 'min-w-[280px]'
 </script>
 
 <template>
-  <main>
-    <div class="container pb-10">
+  <main class="pl-4">
+    <div class="container pb-8">
       <h1 class="h1 text-center">Your meal plan</h1>
     </div>
-    <div class="pr-0 pb-4 pl-20 overflow-auto custom-scroll">
+    <div class="pr-0 pb-4 md:pl-4 lg:pl-20 overflow-auto custom-scroll">
       <div class="flex flex-row items-start justify-start pb-3 min-w-fit">
         <div v-for="(dayInfo, day) in mealPlan" :key="day" class="pr-4" :class="minCardWidth">
           <div class="w-full rounded bg-grey-900 px-x py-5 mb-3">
@@ -46,8 +46,8 @@ const minCardWidth: string = 'min-w-[280px]'
         </div>
       </div>
     </div>
-    <div class="container pt-8 pb-12 flex flex-row items-center justify-center">
-      <RouterLink to="/shopping-list" class="mx-2"
+    <div class="container pt-6 md:pt-8 pb-12 flex flex-col md:flex-row items-center justify-center">
+      <RouterLink to="/shopping-list" class="mx-2 mb-4 md:mb-0"
         ><ButtonComponent buttonText="See shopping list "
       /></RouterLink>
       <GenerateMealPlanBtn

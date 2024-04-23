@@ -4,10 +4,7 @@ import { computed } from 'vue'
 import { useMealPlanStore } from '@/stores/mealPlanStore'
 
 const mealPlanStore = useMealPlanStore()
-const ingredientsLength = computed<number>(() => {
-  const list = mealPlanStore.ingredients.split(',')
-  return list.map((item) => item.trim().toLowerCase()).length
-})
+const ingredientsLength = computed<number>(() => mealPlanStore.ingredients.length)
 </script>
 
 <template>

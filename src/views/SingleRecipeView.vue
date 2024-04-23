@@ -2,7 +2,7 @@
 import { useRoute, useRouter } from 'vue-router'
 import { useMealPlanStore } from '@/stores/mealPlanStore'
 import { computed, ref, onMounted } from 'vue'
-import type { RecipeExtended } from '@/types/recipes'
+import type { RecipeExtended, CombinedIngredient } from '@/types/recipes'
 import defaultMealImage from '../assets/images/defaultMeal.jpg'
 import LabelComponent from '@/components/LabelComponent.vue'
 import { roundUpToNearestInteger } from '@/composables/calculations'
@@ -15,7 +15,7 @@ const allRecipes = computed<RecipeExtended[]>(() => mealPlanStore.allRecipes)
 const currentRecipe = ref<RecipeExtended | undefined>(
   allRecipes.value.find((item) => item.title === route.params.title.toString().replace(/%2F/g, '/'))
 )
-const myIngredients = computed<string>(() => mealPlanStore.ingredients)
+const myIngredients = computed<CombinedIngredient[]>(() => mealPlanStore.combinedIngredients)
 
 onMounted(() => {
   if (!currentRecipe.value) {
@@ -43,9 +43,13 @@ const roundAmount = (number: number | undefined): number => {
 </script>
 
 <template>
-  <main>
-    <div class="grid grid-cols-2 gap-10 container mb-20 rounded-2xl bg-grey-900 h-[440px]">
-      <div class="h-full object-cover rounded-2xl overflow-hidden">
+  <main class="px-4 pb-20">
+    <div
+      class="grid grid-cols-2 gap-6 lg:gap-10 container mb-12 md:mb-20 rounded-2xl bg-grey-900 md:h-[440px]"
+    >
+      <div
+        class="h-[220px] sm:h-[300px] md:h-full object-cover rounded-2xl overflow-hidden col-span-2 md:col-span-1"
+      >
         <img
           :src="imageUrl"
           :alt="currentRecipe?.title"
@@ -53,21 +57,23 @@ const roundAmount = (number: number | undefined): number => {
           @error="handleImageError"
         />
       </div>
-      <div class="py-10 pr-10 flex flex-col justify-center">
-        <div class="pb-8">
+      <div
+        class="pb-12 px-4 sm:px-6 md:py-10 md:pr-10 flex flex-col justify-center col-span-2 md:col-span-1"
+      >
+        <div class="pb-4 md:pb-8">
           <LabelComponent
             :text="currentRecipe?.mealType"
             :type="currentRecipe?.mealType"
             class="mb-3"
           />
-          <div class="flex flex-row items-center pb-3">
+          <div class="flex flex-row items-center pb-1 md:pb-3 flex-wrap">
             <LabelComponent
               :text="
                 roundUpToNearestInteger(currentRecipe!.nutrition.nutrients.calories).toString() +
                 ' kCal'
               "
               type="calories"
-              class="mr-2"
+              class="mr-2 mb-2 lg:mb-0"
             />
             <LabelComponent
               :text="
@@ -75,7 +81,7 @@ const roundAmount = (number: number | undefined): number => {
                 ' g protein'
               "
               type="default"
-              class="mr-2"
+              class="mr-2 mb-2 lg:mb-0"
             />
             <LabelComponent
               :text="
@@ -83,7 +89,7 @@ const roundAmount = (number: number | undefined): number => {
                 ' g fat'
               "
               type="default"
-              class="mr-2"
+              class="mr-2 mb-2 lg:mb-0"
             />
             <LabelComponent
               :text="
@@ -91,6 +97,7 @@ const roundAmount = (number: number | undefined): number => {
                   currentRecipe!.nutrition.nutrients.carbohydrates
                 ).toString() + ' g carbs'
               "
+              class="mb-2 lg:mb-0"
               type="default"
             />
           </div>
@@ -112,24 +119,29 @@ const roundAmount = (number: number | undefined): number => {
         </h1>
       </div>
     </div>
-    <div class="container pb-20">
-      <div class="max-w-7xl mx-auto grid grid-cols-10 gap-16">
-        <div class="col-span-3">
+    <div class="container">
+      <div class="max-w-7xl mx-auto grid grid-cols-10 gap-8 lg:gap-16">
+        <div class="col-span-full sm:col-span-4 lg:col-span-3">
           <h3 class="h3 mb-6">Ingredients</h3>
           <ul>
             <IngredientListItem
               v-for="(item, index) in currentRecipe?.extendedIngredients"
               :key="index"
               class="mb-2"
-              :item
               :text="item.name"
-              :isChecked="myIngredients.includes(item.name)"
+              :isChecked="
+                myIngredients.find(
+                  (ingredient) => ingredient.name === item.name && ingredient.isChecked
+                )
+                  ? true
+                  : false
+              "
               :amount="roundAmount(item.measures?.metric.amount)"
               :unit="item.measures?.metric.unitShort"
             />
           </ul>
         </div>
-        <div class="col-span-7">
+        <div class="col-span-full sm:col-span-6 lg:col-span-7">
           <h3 class="h3 mb-6">Method</h3>
           <div>
             <p

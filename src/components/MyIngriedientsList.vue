@@ -20,9 +20,7 @@ defineProps({
 
 const mealPlanStore = useMealPlanStore()
 const ingredientsList = ref<CombinedIngredient[]>(mealPlanStore.combinedIngredients)
-const myIngredients = computed<string[]>(() =>
-  mealPlanStore.ingredients.split(',').map((item) => item.trim().toLowerCase())
-)
+const myIngredients = computed<string[]>(() => mealPlanStore.ingredients)
 const checkedIngredients = computed<CombinedIngredient[]>(() =>
   ingredientsList.value.filter((item) => item.isChecked && item.name)
 )
@@ -43,7 +41,7 @@ const addNewIngredient = () => {
 }
 
 handleKeyDown(addNewIngredient, 'Enter')
-console.log(checkedIngredients.value)
+
 watch(
   () => mealPlanStore.combinedIngredients,
   (newValue) => {

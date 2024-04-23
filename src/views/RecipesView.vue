@@ -46,12 +46,12 @@ watch(
 </script>
 
 <template>
-  <main>
-    <div class="container pb-10">
+  <main class="px-4 pb-20">
+    <div class="container pb-8">
       <h1 class="h1 text-center">Recipes</h1>
     </div>
     <div v-if="allRecipes" class="container">
-      <div class="pb-10 flex flex-row items-center justify-center">
+      <div class="pb-6 md:pb-10 flex flex-row items-center justify-center">
         <TabButton
           v-for="(item, key) in allMealTypes"
           :key="item"
@@ -60,7 +60,7 @@ watch(
           @click="selectedType = key"
         />
       </div>
-      <ul class="grid grid-cols-4 gap-5">
+      <ul class="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-5">
         <RecipeCard
           v-for="item in sortedRecipes"
           :key="item.id"

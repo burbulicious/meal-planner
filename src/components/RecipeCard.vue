@@ -49,8 +49,8 @@ const getMealCalories = (id: number): number => {
       </div>
       <div class="recipe-card-info" :class="!hideLinkBtn ? 'pb-14' : 'pb-3'">
         <p class="w-full pb-3 text-[14px]">{{ item.title }}</p>
-        <div class="flex flex-row">
-          <LabelComponent :text="item.mealType" :type="item.mealType" class="mr-2" />
+        <div class="flex flex-row flex-wrap">
+          <LabelComponent :text="item.mealType" :type="item.mealType" class="mr-2 mb-2 md:mb-0" />
           <LabelComponent :text="getMealCalories(item.id).toString() + ' kCal'" type="calories" />
         </div>
         <button
@@ -66,7 +66,7 @@ const getMealCalories = (id: number): number => {
 
 <style scoped>
 .recipe-card-info {
-  @apply w-full pt-3 px-4 flex flex-col transition-all duration-300;
+  @apply w-full pt-3 px-3 flex flex-col transition-all duration-300;
   .view-recipe-link {
     @apply opacity-0;
   }

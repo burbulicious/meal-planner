@@ -36,7 +36,7 @@ watch(
 <template>
   <RouterLink
     :to="link"
-    class="uppercase px-6"
+    class="uppercase px-2 md:px-6 text-center text-[13px] md:text-[16px]"
     :class="isActive ? 'text-yellow' : 'opacity-70 text-white'"
     >{{ text }}</RouterLink
   >

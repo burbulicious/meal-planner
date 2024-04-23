@@ -20,7 +20,7 @@ const isActive = computed<boolean>(() => props.isActive)
 
 <style scoped>
 .tab-item {
-  @apply pb-4 px-5 border-b border-white text-white opacity-70 transition-all duration-300;
+  @apply pb-2 md:pb-4 px-2 md:px-5 border-b border-white text-white opacity-70 transition-all duration-300 text-[13px] md:text-[16px];
   &:hover,
   &.active {
     @apply text-yellow border-yellow opacity-100;
