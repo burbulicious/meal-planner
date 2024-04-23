@@ -77,7 +77,7 @@ const getRecipeIds = (mealPlan: WeeklyMealPlan): number[] => {
   Object.keys(mealPlan).forEach((day) => {
     const meals = mealPlan[day].meals
     meals.forEach((item: any) => {
-      recipeIds.push(item.id)
+      if (!recipeIds.includes(item.id)) recipeIds.push(item.id)
     })
   })
   return recipeIds
@@ -184,5 +184,7 @@ export {
   getSingleFullRecipe,
   getMealNutrition,
   getMealType,
-  getFullIngredientList
+  getFullIngredientList,
+  formatMealPlan,
+  getRecipeIds
 }

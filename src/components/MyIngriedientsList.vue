@@ -53,8 +53,14 @@ watch(
 <template>
   <div class="mb-8 flex" :class="wide ? 'flex-row' : 'flex-col'">
     <div class="flex flex-row justify-center relative large-new-habit-card w-full mr-3">
-      <label class="w-full pr-3 flex">
-        <input type="text" v-model="newIngredient" placeholder="Your ingredient" />
+      <label class="w-full pr-3 flex" for="new-ingredient">
+        <input
+          data-testid="new-ingredient"
+          type="text"
+          v-model="newIngredient"
+          placeholder="Your ingredient"
+          id="new-ingredient"
+        />
       </label>
       <ButtonComponent
         btnClasses="btn-inline btn-inline__yellow flex-none"
@@ -69,17 +75,17 @@ watch(
       v-if="showBtn"
     />
   </div>
-  <div v-if="checkedIngredients.length !== 0">
-    <ul v-for="(item, index) in ingredientsList" :key="index">
-      <IngredientListItem
-        class="mb-2 h-full"
-        :class="{ hidden: !item.isChecked }"
-        :text="item.name"
-        :showMetrics="false"
-        :isChecked="item.isChecked"
-      />
-    </ul>
-  </div>
+  <ul v-if="checkedIngredients.length !== 0">
+    <IngredientListItem
+      v-for="(item, index) in ingredientsList"
+      :key="index"
+      class="mb-2 h-full"
+      :class="{ hidden: !item.isChecked }"
+      :text="item.name"
+      :showMetrics="false"
+      :isChecked="item.isChecked"
+    />
+  </ul>
 </template>
 
 <style scoped>

@@ -15,11 +15,11 @@ it('Adds ingredients correctly', () => {
   piniaStore.addIngredient('carrot')
   piniaStore.addIngredient('potato')
   piniaStore.addIngredient('')
-  expect(piniaStore.ingredients).toBe('carrot, potato')
+  expect(piniaStore.ingredients).toEqual(['carrot', 'potato'])
 })
 it('removes ingredients correctly', () => {
   piniaStore.removeIngredient('carrot')
-  expect(piniaStore.ingredients).toBe('potato')
+  expect(piniaStore.ingredients).toEqual(['potato'])
 })
 it('combines ingredients correctly', () => {
   expect(piniaStore.combinedIngredients).toEqual([

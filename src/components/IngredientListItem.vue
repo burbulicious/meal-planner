@@ -67,7 +67,9 @@ watch(
         @click="updateIngredients($event)"
       />
       <span class="custom-checkbox"></span>
-      <span>{{ `${showMetrics ? `${amount} ${unit}` : ''} ${text}` }}</span>
+      <span class="ingredient-title">{{
+        `${showMetrics ? `${amount} ${unit}` : ''} ${text}`
+      }}</span>
     </label>
   </li>
   <li v-else>
