@@ -1,14 +1,5 @@
 import { test, expect } from '@playwright/test'
-import {
-  getDataFromLocalStorage,
-  storeDataInLocalStorage,
-  mealPlanKey,
-  ingredientsKey,
-  allRecipesKey,
-  caloriesLimitKey,
-  allExtractedIngredientsKey,
-  combinedIngredientsKey
-} from '../src/utils/handleLocalStorage.js'
+import { mealPlanKey, ingredientsKey } from '../src/utils/handleLocalStorage.js'
 
 // See here how to get started:
 // https://playwright.dev/docs/intro
@@ -52,5 +43,4 @@ test('Generates meal plan', async ({ page }) => {
 
   await page.getByRole('link', { name: 'Shopping list', exact: true }).click()
   expect(page.url()).toContain('/shopping-list')
-  // await page.locator('label').filter({ hasText: 'potatoe' }).first().click();
 })
