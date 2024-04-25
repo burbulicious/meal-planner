@@ -1,6 +1,9 @@
 # meal-planner
 
 This template should help get you started developing with Vue 3 in Vite.
+You can see the deployment live [here](https://meal-planner-zeta-ten.vercel.app/)
+I am using spoonacular API in this app
+in order to run this locally you should create an .env.local file to contain VITE_SPOONACULAR_API_KEY = {your_personal_spoonacular_api_key}
 
 ## Recommended IDE Setup
 
