@@ -7,7 +7,7 @@ import type {
   Ingredient
 } from '@/types/recipes'
 
-const API_KEY = import.meta.env.VITE_SPOONACULAR_API_KEY
+const API_KEY = import.meta.env.VITE_SPOONACULAR_API_KEY || process.env.VITE_SPOONACULAR_API_KEY
 
 const findSimilarIngredients = async (ingredients: string[]): Promise<string[]> => {
   const response = await axios.get('https://api.spoonacular.com/recipes/findByIngredients', {
