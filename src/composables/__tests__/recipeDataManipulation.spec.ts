@@ -1,5 +1,5 @@
 import { it, expect, describe } from 'vitest'
-import { formatMealPlan, getRecipeIds, getSingleFullRecipe } from '../fetchRecipes'
+import { formatMealPlan, getRecipeIds, getSingleFullRecipe } from '../recipeDataManipulation'
 import type { MealType, RecipeExtended, WeeklyMealPlan } from '@/types/recipes'
 
 const apiReturnedData = {

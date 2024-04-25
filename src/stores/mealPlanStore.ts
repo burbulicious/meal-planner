@@ -6,9 +6,9 @@ import type {
   Ingredient,
   CombinedIngredient
 } from '@/types/recipes'
-import { generateMealPlan, getFullRecipes, getFullIngredientList } from '@/services/fetchRecipes'
+import { generateMealPlan, getFullRecipes } from '@/services/fetchRecipes'
+import { getFullIngredientList } from '@/composables/recipeDataManipulation'
 import {
-  getDataFromLocalStorage,
   storeDataInLocalStorage,
   mealPlanKey,
   ingredientsKey,
@@ -17,97 +17,24 @@ import {
   allExtractedIngredientsKey,
   combinedIngredientsKey
 } from '@/utils/handleLocalStorage'
-
-const initialMealPlanStructure = {
-  monday: {
-    meals: [],
-    nutrients: {
-      calories: 0,
-      protein: 0,
-      fat: 0,
-      carbohydrates: 0
-    }
-  },
-  tuesday: {
-    meals: [],
-    nutrients: {
-      calories: 0,
-      protein: 0,
-      fat: 0,
-      carbohydrates: 0
-    }
-  },
-  wednesday: {
-    meals: [],
-    nutrients: {
-      calories: 0,
-      protein: 0,
-      fat: 0,
-      carbohydrates: 0
-    }
-  },
-  thursday: {
-    meals: [],
-    nutrients: {
-      calories: 0,
-      protein: 0,
-      fat: 0,
-      carbohydrates: 0
-    }
-  },
-  friday: {
-    meals: [],
-    nutrients: {
-      calories: 0,
-      protein: 0,
-      fat: 0,
-      carbohydrates: 0
-    }
-  },
-  saturday: {
-    meals: [],
-    nutrients: {
-      calories: 0,
-      protein: 0,
-      fat: 0,
-      carbohydrates: 0
-    }
-  },
-  sunday: {
-    meals: [],
-    nutrients: {
-      calories: 0,
-      protein: 0,
-      fat: 0,
-      carbohydrates: 0
-    }
-  }
-}
-const initialCaloriesLimit: number = getDataFromLocalStorage(caloriesLimitKey) || 2000
-const initialmealPlan: WeeklyMealPlan =
-  getDataFromLocalStorage(mealPlanKey) || initialMealPlanStructure
-const initialIngredients: string[] = getDataFromLocalStorage(ingredientsKey) || []
-const initialRecipes: RecipeExtended[] = getDataFromLocalStorage(allRecipesKey) || []
-const initialExtractedIngredients: Ingredient[] =
-  getDataFromLocalStorage(allExtractedIngredientsKey) || []
-const initialCombinedIngredients: CombinedIngredient[] = getDataFromLocalStorage(
-  combinedIngredientsKey
-) || [
-  {
-    name: '',
-    isChecked: false
-  }
-]
+import {
+  initialCaloriesLimit,
+  initialmealPlan,
+  initialIngredients,
+  initialRecipes,
+  initialExtractedIngredients,
+  initialCombinedIngredients
+} from './initialVariableValues'
 
 export const useMealPlanStore = defineStore({
   id: 'mealPlan',
   state: () => ({
-    mealPlan: { ...initialmealPlan } as WeeklyMealPlan,
-    ingredients: initialIngredients as string[],
-    allRecipes: initialRecipes as RecipeExtended[],
-    caloriesLimit: initialCaloriesLimit as number,
-    extractedIngredients: initialExtractedIngredients as Ingredient[],
-    combinedIngredients: initialCombinedIngredients as CombinedIngredient[]
+    mealPlan: { ...initialmealPlan },
+    ingredients: initialIngredients,
+    allRecipes: initialRecipes,
+    caloriesLimit: initialCaloriesLimit,
+    extractedIngredients: initialExtractedIngredients,
+    combinedIngredients: initialCombinedIngredients
   }),
 
   actions: {
@@ -195,11 +122,10 @@ export const useMealPlanStore = defineStore({
       return this.allRecipes.filter((meal) => meal.mealType === mealType)
     },
     setExtractedIngredients() {
-      const extractedIngredients = getFullIngredientList(this.allRecipes)
-      this.extractedIngredients = extractedIngredients
+      this.extractedIngredients = getFullIngredientList(this.allRecipes)
       storeDataInLocalStorage(allExtractedIngredientsKey, this.extractedIngredients)
-      const updatedCombinedIngredients: CombinedIngredient[] = this.combinedIngredients
 
+      const updatedCombinedIngredients: CombinedIngredient[] = this.combinedIngredients
       this.extractedIngredients.forEach((item) => {
         if (!this.getIngredients.includes(item.name) || item.name !== '') {
           updatedCombinedIngredients.push({ name: item.name, isChecked: false })

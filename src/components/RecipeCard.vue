@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { roundUpToNearestInteger } from '@/composables/calculations'
 import { useMealPlanStore } from '@/stores/mealPlanStore'
-import { getMealNutrition } from '@/services/fetchRecipes'
+import { getMealNutrition } from '@/composables/recipeDataManipulation'
 import LabelComponent from '@/components/LabelComponent.vue'
 import { RouterLink } from 'vue-router'
 import defaultMealImage from '../assets/images/defaultMeal.jpg'

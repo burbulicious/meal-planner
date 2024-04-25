@@ -5,7 +5,7 @@ import type { CombinedIngredient } from '@/types/recipes'
 import GenerateMealPlanBtn from './GenerateMealPlanBtn.vue'
 import IngredientListItem from '@/components/IngredientListItem.vue'
 import ButtonComponent from '@/components/ButtonComponent.vue'
-import handleKeyDown from '@/composables/keyDownHandler'
+import handleKeyDown from '@/utils/keyDownHandler'
 
 defineProps({
   wide: {
@@ -98,3 +98,4 @@ input[type='text'] {
   @apply bg-transparent text-white outline-none w-full text-base leading-tight font-semibold tracking-widest;
 }
 </style>
+@/utils/keyDownHandler
