@@ -7,12 +7,12 @@ import type {
   Ingredient
 } from '@/types/recipes'
 
-const apiKey = '45673fe7c19440788b8f4841be2d733e'
+const API_KEY = import.meta.env.VITE_SPOONACULAR_API_KEY
 
 const findSimilarIngredients = async (ingredients: string[]): Promise<string[]> => {
   const response = await axios.get('https://api.spoonacular.com/recipes/findByIngredients', {
     params: {
-      apiKey: apiKey,
+      apiKey: API_KEY,
       ingredients: ingredients.join(', '),
       number: 5,
       ignorePantry: true
@@ -56,7 +56,7 @@ const generateMealPlan = async (
     const similarIngredients: string[] = await findSimilarIngredients(ingredients)
     const response = await axios.get(`https://api.spoonacular.com/mealplanner/generate`, {
       params: {
-        apiKey: apiKey,
+        apiKey: API_KEY,
         timeFrame: 'week',
         targetCalories: calories,
         diet: 'balanced',
@@ -152,7 +152,7 @@ const getFullRecipes = async (mealPlan: WeeklyMealPlan): Promise<RecipeExtended[
     const response = await axios.get('https://api.spoonacular.com/recipes/informationBulk', {
       params: {
         ids: recipeIds.join(','),
-        apiKey: apiKey,
+        apiKey: API_KEY,
         includeNutrition: true
       }
     })
